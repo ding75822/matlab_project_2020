@@ -52,6 +52,7 @@ classdef HE_Mesh <handle
             bool = isfield(mesh.dict,marker);
             if bool
                 edge = getfield(mesh.dict,marker);
+                mesh.dict = rmfield(mesh.dict,marker);
             else 
                 edge = 0;
             end
@@ -88,7 +89,7 @@ classdef HE_Mesh <handle
                p_edge.e_pair = edge;
            %在字典中记录
            %耗时0.0045
-               dict_add(mesh,num_v1,num_v2,edge)   
+               %dict_add(mesh,num_v1,num_v2,edge)   
                dict_add(mesh,num_v2,num_v1,p_edge) 
            
            %在mesh中添加边
