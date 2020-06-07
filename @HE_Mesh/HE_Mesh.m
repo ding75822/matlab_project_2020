@@ -13,41 +13,13 @@ classdef HE_Mesh <handle
        end
        
        %1.2 向字典中加入元素
-       function dict_add(mesh,num_v1,num_v2,edge)   
-           %tic
-           %marker = strcat(int2str(num_v1),int2str(num_v2));
-           %marker = sprintf('%d%d',num_v1,num_v2);
-           %tmp = table({marker},{edge});          
-           %mesh.dict = [mesh.dict;tmp];        
-          %time = toc
+       function dict_add(mesh,num_v1,num_v2,edge) 
           marker = strcat('e',int2str(num_v1),'_',int2str(num_v2));
           mesh.dict=setfield(mesh.dict,marker,edge);
        end
        
         %1.3 在字典中查找元素
        function edge = dict_find(mesh,num_v1,num_v2)
-           %版本1
-           %TF = ismissing(mesh.dict,marker);
-            %if sum(TF)==0
-                %edge = 0;
-                %return
-            %else
-                %[row,~] = find(TF);
-                %edge = mesh.dict.Var2{row};
-            %end
-            %版本2
-            %[row,col] = size(mesh.dict);
-            %if ((num_v1>row) ||(num_v2>col)) %超出范围，一定不在表内 
-                %edge = 0;
-                %return
-            %elseif(mesh.dict(num_v1,num_v2)==[])%不在表内
-                %edge = 0;
-                %return
-            %else %在表内，则将其补全
-                %edge = mesh.dict(num_v1,num_v2);
-                %return
-            %end
-            %版本3
             marker = strcat('e',int2str(num_v1),'_',int2str(num_v2));
             bool = isfield(mesh.dict,marker);
             if bool
@@ -73,7 +45,7 @@ classdef HE_Mesh <handle
            if edge_~=0 %在dict内，则一定残缺，则要补全该边信息
                edge = edge_;
                return
-           else %不在dict内
+           else        %不在dict内
                v1 = mesh.m_verts(num_v1);
                v2 = mesh.m_verts(num_v2);
            %创建半边极其对偶边
@@ -87,11 +59,8 @@ classdef HE_Mesh <handle
            %建立对偶关系
                edge.e_pair = p_edge;
                p_edge.e_pair = edge;
-           %在字典中记录
-           %耗时0.0045
-               %dict_add(mesh,num_v1,num_v2,edge)   
-               dict_add(mesh,num_v2,num_v1,p_edge) 
-           
+           %在字典中记录                
+               dict_add(mesh,num_v2,num_v1,p_edge)         
            %在mesh中添加边
                mesh.m_edges = [mesh.m_edges;edge];
            end
@@ -99,7 +68,6 @@ classdef HE_Mesh <handle
        end
        %2.3 插入面
        function InsertFace(mesh,num_v1,num_v2,num_v3)
-           %三个inseretedge耗时0.015s
             fvert = [mesh.m_verts(num_v1);mesh.m_verts(num_v2);mesh.m_verts(num_v3)];
             e1 = InsertEdge(mesh,num_v1,num_v2);
             e2 = InsertEdge(mesh,num_v2,num_v3);
@@ -118,6 +86,7 @@ classdef HE_Mesh <handle
             mesh.m_faces = [mesh.m_faces;face];
        end
        
+       %3.1 读取txt文件的函数
        function LoadFromTxt(mesh,filename)
             datatable = importdata(filename);
             %数据
@@ -126,24 +95,22 @@ classdef HE_Mesh <handle
 
             [data_rows,~] = size(data);
             count = 0;
-            timelen = 0.002;    
+            %timelen = 0;    
             while (count~=data_rows)
                 count = count + 1;
                 %tic
                 if (header(count)=='v')
                     mesh.InsertVertex(data(count,1),data(count,2),data(count,3));
                 end
-
-                
                 if (header(count)=='f')
                     tic
                     mesh.InsertFace(data(count,1),data(count,2),data(count,3));
-                    timelen(end+1)=toc;
-                    timelen(end)
-                end
-                
+                    %timelen=toc
+                end               
             end
-            %ave = mean(timelen);
        end
+       
+       %4.1 待定义的函数
+       
    end
 end
