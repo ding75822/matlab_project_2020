@@ -1,17 +1,16 @@
-clear
-edge = HE_Edge;
-p_edge = HE_Edge;
-p2_edge = HE_Edge;
-p3_edge = HE_Edge;
-edge.e_pair=p_edge;
-
-marker = strcat(int2str(1),'_',int2str(2));
-
-filename = 'mymat.mat';
-m = matfile(filename,'Writable',true);
-x =magic(20);
-y = magic(15);
-m.y = y;
-save('mymat.mat','x');
-m.y(81:100,81:100) = magic(20);
-z = m.y(85:94,85:94);
+theta = gallery('uniformdata',[100,1],0)*2*pi;
+phi = gallery('uniformdata',[100,1],1)*pi;
+x = cos(theta).*sin(phi);
+y = sin(theta).*sin(phi);
+z = cos(phi);
+DT = delaunayTriangulation(x,y,z);
+[T,Xb] = freeBoundary(DT);
+TR = triangulation(T,Xb);
+P = incenter(TR);
+F = faceNormal(TR); 
+trisurf(T,Xb(:,1),Xb(:,2),Xb(:,3), ...
+     'FaceColor','cyan','faceAlpha',0.8);
+axis equal
+hold on  
+quiver3(P(:,1),P(:,2),P(:,3), ...
+     F(:,1),F(:,2),F(:,3),0.5,'color','r');

@@ -1,4 +1,5 @@
 function cloud_point(mesh)
+%ªÊ÷∆µ„‘∆Õº  ‰»Îmesh
 count1=0;
 model_vert = mesh.m_verts;
 [n,~] = size(model_vert);

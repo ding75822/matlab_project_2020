@@ -31,8 +31,8 @@ classdef HE_Mesh <handle
        end
        
        %2.1 插入节点，参数1：网络 参数2、3、4：节点坐标
-       function InsertVertex(mesh,x,y,z)
-           tmp = HE_Vertex(x,y,z);
+       function InsertVertex(mesh,x,y,z,num)
+           tmp = HE_Vertex(x,y,z,num);
            mesh.m_verts = [mesh.m_verts;tmp];
        end
        
@@ -100,10 +100,10 @@ classdef HE_Mesh <handle
                 count = count + 1;
                 %tic
                 if (header(count)=='v')
-                    mesh.InsertVertex(data(count,1),data(count,2),data(count,3));
+                    mesh.InsertVertex(data(count,1),data(count,2),data(count,3),count);
                 end
                 if (header(count)=='f')
-                    tic
+                    %tic
                     mesh.InsertFace(data(count,1),data(count,2),data(count,3));
                     %timelen=toc
                 end               

@@ -1,6 +1,6 @@
 classdef HE_Vertex <handle
    properties
-      x, y, z;
+      x, y, z,num;
    end
    
    properties
@@ -10,11 +10,12 @@ classdef HE_Vertex <handle
    
    methods
        
-       function vertex = HE_Vertex(x, y, z)
-           if nargin == 3
+       function vertex = HE_Vertex(x, y, z,num)
+           if nargin == 4
                vertex.x = x;
                vertex.y = y;
                vertex.z = z;
+               vertex.num = num;
            end
        end
        
